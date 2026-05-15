@@ -66,7 +66,7 @@ if submit_button:
             try:
                 # Cara pemanggilan model versi terbaru
                 response = client.models.generate_content(
-                    model='gemini-2.0-flash',  # <--- UBAH ANGKA 1.5 MENJADI 2.0 DI SINI
+                    model='gemini-1.5-flash',  # <--- UBAH ANGKA 1.5 MENJADI 2.0 DI SINI
                     contents=prompt_sistem
                 )
                 
