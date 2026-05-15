@@ -1,15 +1,13 @@
 import streamlit as st
-import google.generativeai as genai
+from google import genai # Import library baru
 
-# 1. Konfigurasi API
-# Ganti dengan API Key Anda dari Google AI Studio
-API_KEY = "AIzaSyCXCbiOG38k7JZR5yyOruflM1rV1JeWhyY" 
-genai.configure(api_key=API_KEY)
+# 1. Konfigurasi API Menggunakan Secrets
+API_KEY = st.secrets["GEMINI_API_KEY"] 
 
-# Menggunakan model Gemini 1.5 Flash karena cepat dan sangat baik untuk teks
-model = genai.GenerativeModel('gemini-1.5-flash')
+# Inisialisasi client API versi terbaru
+client = genai.Client(api_key=API_KEY)
 
-# 2. Pengaturan Tampilan Halaman Web
+# 2. Pengaturan Tampilan
 st.set_page_config(page_title="AI Asisten Guru", page_icon="💡", layout="centered")
 
 st.title("💡 Generator Ide Sentra Belajar")
@@ -37,11 +35,9 @@ if submit_button:
         st.error("Mohon isi Tema Pembelajaran terlebih dahulu.")
     else:
         with st.spinner("Menganalisis tema dan menyusun ide kegiatan..."):
-            
-            # Ini adalah "Secret Sauce" - Prompt terstruktur yang disembunyikan dari user
             prompt_sistem = f"""
             Anda adalah seorang ahli pendidikan anak usia dini dan pengembang kurikulum yang inovatif. 
-            Buatkan 1 ide kegiatan sentra belajar atau *loose parts* yang spesifik, praktis, dan kreatif berdasarkan data berikut:
+            Buatkan 1 ide kegiatan sentra belajar atau loose parts yang spesifik, praktis, dan kreatif berdasarkan data berikut:
             - Tema: {tema}
             - Usia Anak: {usia}
             - Fokus Perkembangan: {aspek}
@@ -68,10 +64,12 @@ if submit_button:
             """
             
             try:
-                # Memanggil API Gemini
-                response = model.generate_content(prompt_sistem)
+                # Cara pemanggilan model versi terbaru
+                response = client.models.generate_content(
+                    model='gemini-1.5-flash',
+                    contents=prompt_sistem
+                )
                 
-                # Menampilkan Hasil
                 st.success("Ide kegiatan berhasil dibuat!")
                 st.markdown("---")
                 st.markdown(response.text)
