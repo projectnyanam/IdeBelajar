@@ -8,6 +8,9 @@ from google import genai
 API_KEY = st.secrets["GEMINI_API_KEY"] 
 client = genai.Client(api_key=API_KEY)
 
+# Tentukan Link Montage Anda di sini agar mudah diubah kapan saja
+LINK_MONTAGE = "https://omg10.com/4/10984630"
+
 # ==========================================
 # 2. PENGATURAN TAMPILAN HALAMAN (UI)
 # ==========================================
@@ -58,7 +61,7 @@ with st.form("form_ide_belajar"):
     submit_button = st.form_submit_button(label="Rancang Kegiatan Sekarang 🚀")
 
 # ==========================================
-# 4. LOGIKA PEMROSESAN AI DENGAN FALLBACK
+# 4. LOGIKA PEMROSESAN AI DENGAN FALLBACK & OPSI 2
 # ==========================================
 if submit_button:
     if not tema:
@@ -96,13 +99,18 @@ if submit_button:
             """
             
             try:
-                # PERCOBAAN PERTAMA: Menggunakan Model 2.5 Flash (Utama & Gratis)
+                # PERCOBAAN PERTAMA: Menggunakan Model 2.5 Flash (Utama)
                 response = client.models.generate_content(
                     model='gemini-2.5-flash',
                     contents=prompt_sistem
                 )
                 st.success("✨ Ide kegiatan berhasil dibuat!")
                 st.markdown(response.text)
+                
+                # --- IMPLEMENTASI OPSI 2 (Tombol Link Buka Tab Baru) ---
+                st.markdown("---")
+                st.info("💡 Ingin melihat referensi visual atau materi tambahan?")
+                st.link_button("🎥 Buka Link Montage", LINK_MONTAGE)
                 
             except Exception as error_utama:
                 # JIKA 2.5 GAGAL: Peringatan halus dan beralih ke 2.0
@@ -116,6 +124,11 @@ if submit_button:
                     )
                     st.success("✨ Ide kegiatan berhasil dibuat! (Via server cadangan)")
                     st.markdown(response.text)
+                    
+                    # --- IMPLEMENTASI OPSI 2 PADA SERVER CADANGAN ---
+                    st.markdown("---")
+                    st.info("💡 Ingin melihat referensi visual atau materi tambahan?")
+                    st.link_button("🎥 Buka Link Montage", LINK_MONTAGE)
                     
                 except Exception as error_cadangan:
                     # JIKA KEDUANYA GAGAL
