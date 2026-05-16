@@ -22,7 +22,7 @@ st.set_page_config(
 
 # Judul dan Deskripsi
 st.title("🌱 Sentra Tumbuh Anak")
-st.subheader("Generator Ide Belajar & Loose Parts")
+st.subheader("Generator Ide Belajar")
 st.write("Rancang kegiatan kelas yang bermakna, menyenangkan, dan merangsang tumbuh kembang anak sesuai standar PAUD.")
 st.markdown("---")
 
